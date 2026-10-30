@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LEAP</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="description" content="LEAP: Learning Emergent Active Perception for Quadruped Navigation. IEEE-RAS Humanoids 2026.">
+<meta property="og:title" content="LEAP: Learning Emergent Active Perception for Quadruped Navigation">
+<meta property="og:description" content="Gaze control emerges from task reward alone: 92.7% held-out success on goal-oriented navigation over hazardous terrain.">
+<meta property="og:image" content="https://ubgk.github.io/leap/assets/video/hero_poster.jpg">
+<meta property="og:url" content="https://ubgk.github.io/leap/">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root {
+  --bg: #fbfbfa;
+  --surface: #ffffff;
+  --ink: #16181b;
+  --muted: #5d636b;
+  --rule: #e3e4e6;
+  --accent: #1d8a36;
+  --accent-soft: #e6f4e9;
+  --code: #f2f3f4;
+  --shadow: 0 1px 2px rgba(0,0,0,.05), 0 4px 16px rgba(0,0,0,.05);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1012;
+    --surface: #16191c;
+    --ink: #e9eaec;
+    --muted: #9aa1a9;
+    --rule: #262a2f;
+    --accent: #59ff66;
+    --accent-soft: #15301a;
+    --code: #1b1e22;
+    --shadow: none;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1012; --surface: #16191c; --ink: #e9eaec; --muted: #9aa1a9; --rule: #262a2f;
+  --accent: #59ff66; --accent-soft: #15301a; --code: #1b1e22; --shadow: none;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 17px/1.6 "Noto Sans", sans-serif;
+}
+h1, h2, h3, .authors, .venue, .btn, .stat .n, .t3d-tabs button, .grid4 .tag {
+  font-family: "Google Sans", "Noto Sans", sans-serif;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+
+/* header */
+header.wrap { padding-top: 72px; padding-bottom: 40px; text-align: center; }
+.venue { font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 18px; }
+h1 { font-size: clamp(30px, 4.8vw, 46px); line-height: 1.2; margin: 0; font-weight: 400; letter-spacing: -.005em; }
+h1 b { font-weight: 700; letter-spacing: .02em; }
+@media (max-width: 640px) { h1 br { display: none; } }
+.rule { width: 120px; height: 4px; background: var(--accent); margin: 24px auto 22px; }
+.authors { font-size: 19px; margin: 0 0 6px; }
+.authors sup, .affils sup { font-size: .65em; color: var(--muted); }
+.affils { font-size: 14.5px; color: var(--muted); margin: 0 auto; line-height: 1.6; max-width: 760px; }
+.affils span { display: inline-block; margin: 0 9px; }
+.links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 26px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px;
+  background: var(--ink); color: var(--bg); font-size: 15px; font-weight: 500;
+}
+.btn:hover { text-decoration: none; opacity: .88; }
+.btn.off { background: transparent; color: var(--muted); border: 1px solid var(--rule); cursor: default; }
+.btn svg { width: 16px; height: 16px; }
+
+/* media */
+figure { margin: 0; }
+.media { border-radius: 14px; overflow: hidden; background: #000; box-shadow: var(--shadow); }
+.media video, .media img { display: block; width: 100%; height: auto; }
+.plate { border-radius: 14px; background: #fff; padding: 18px; box-shadow: var(--shadow); border: 1px solid var(--rule); }
+.plate img { display: block; width: 100%; height: auto; }
+figcaption { font-size: 14.5px; color: var(--muted); margin-top: 12px; line-height: 1.55; }
+figcaption b { color: var(--ink); font-weight: 600; }
+
+section.wrap { padding-top: 44px; padding-bottom: 44px; }
+h2 { font-size: 28px; margin: 0 0 22px; letter-spacing: -.01em; text-align: center; }
+h3 { font-size: 19px; margin: 0 0 6px; }
+h3.sub { font-size: 21px; font-weight: 500; margin: 72px 0 18px; padding-top: 18px; border-top: 1px solid var(--rule); }
+h2 + h3.sub { margin-top: 0; padding-top: 0; border-top: 0; }
+figure.gap { margin-top: 44px; }
+figure.narrow { max-width: 640px; margin-left: auto; margin-right: auto; }
+p { margin: 0 0 14px; }
+.lede { font-size: 20px; line-height: 1.5; }
+.abstract { max-width: 720px; margin: 0 auto; line-height: 1.7; }
+
+/* numbers */
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 22px 0 0; }
+.stat { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; }
+.stat .n { font-size: 34px; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat .l { font-size: 14px; color: var(--muted); }
+.stat.hi .n { color: var(--accent); }
+.stat.gt .n { color: var(--muted); }
+
+.contrib { margin: 0; padding-left: 22px; }
+.contrib li { margin-bottom: 8px; }
+.contrib b { font-weight: 600; }
+
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+.two > * { min-width: 0; }
+
+
+/* decoys grid */
+.grid4 { position: relative; }
+.grid4 .tag {
+  position: absolute; padding: 5px 10px; border-radius: 8px; background: rgba(0,0,0,.62);
+  color: #fff; font-size: 13.5px; line-height: 1.3; backdrop-filter: blur(4px); pointer-events: none;
+}
+.grid4 .tag b { font-weight: 700; }
+.grid4 .tag .fell { color: #ff7a6b; font-weight: 600; }
+.grid4 .tag .ok { color: #7dff8a; font-weight: 600; }
+.t1 { left: 1.2%; top: 2%; } .t2 { left: 51.2%; top: 2%; } .t3 { left: 1.2%; top: 52%; } .t4 { left: 51.2%; top: 52%; }
+
+/* tables: Bulma-style, as on Nerfies-template pages */
+.tex { overflow-x: auto; background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; box-shadow: var(--shadow); padding: 10px 18px; }
+table.bt { border-collapse: collapse; width: 100%; font-size: 15px; color: var(--ink); font-variant-numeric: tabular-nums; }
+table.bt th, table.bt td { padding: 8px 12px; text-align: center; white-space: nowrap; border-bottom: 1px solid var(--rule); }
+table.bt thead th { font-weight: 700; border-bottom-width: 2px; }
+table.bt td:first-child, table.bt th:first-child { text-align: left; }
+table.bt tbody tr:last-child td { border-bottom: 0; }
+table.bt tbody tr:hover td { background: var(--code); }
+table.bt code { font: 14px ui-monospace, SFMono-Regular, Menlo, monospace; }
+table.bt .t { display: block; color: var(--muted); font-size: 12px; line-height: 1.2; }
+.two table.bt th, .two table.bt td { padding: 7px 8px; }
+.tcap { font-size: 14.5px; color: var(--muted); margin-top: 12px; line-height: 1.55; }
+.tcap b { color: var(--ink); font-weight: 600; }
+
+/* terrain viewer */
+.t3d { border-radius: 14px; background: var(--surface); border: 1px solid var(--rule); box-shadow: var(--shadow); padding: 14px 16px 12px; }
+.t3d-bar { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.t3d-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.t3d-tabs button, .t3d-reset {
+  font: 500 14px "Google Sans", "Noto Sans", sans-serif; padding: 6px 12px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--rule); background: transparent; color: var(--ink);
+}
+.t3d-tabs button.on { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.t3d-views { display: flex; gap: 6px; }
+.t3d-reset, .t3d-top { font-family: "Google Sans", "Noto Sans", sans-serif; color: var(--muted); padding: 6px 12px; border-radius: 999px; cursor: pointer; border: 1px solid var(--rule); background: transparent; }
+.t3d-canvas { border-radius: 10px; overflow: hidden; background: linear-gradient(#eef2f5, #dfe5ea); }
+.t3d-canvas canvas { display: block; touch-action: none; }
+.t3d-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted); margin-top: 10px; align-items: center; }
+.t3d-legend i { display: inline-block; vertical-align: middle; margin-right: 6px; }
+.t3d-legend .dot { width: 10px; height: 10px; border-radius: 50%; }
+.xm { width: 1.05em; height: 1.05em; vertical-align: -0.17em; fill: #e34948; stroke: #fff; stroke-width: 0.9; stroke-linejoin: miter; paint-order: stroke; }
+.t3d-legend .xm { margin-right: 6px; }
+.t3d-legend .line { width: 18px; height: 4px; border-radius: 2px; }
+.t3d-hint { margin-left: auto; }
+@media (max-width: 760px) { .t3d-hint { margin-left: 0; } }
+
+/* bibtex */
+.bib { position: relative; }
+pre {
+  margin: 0; background: var(--code); border: 1px solid var(--rule); border-radius: 12px; padding: 18px;
+  font: 13.5px/1.55 ui-monospace, SFMono-Regular, Menlo, monospace; overflow-x: auto; color: var(--ink);
+}
+.copy {
+  position: absolute; top: 10px; right: 10px; font: 600 12.5px "Google Sans", sans-serif; padding: 6px 10px;
+  border-radius: 8px; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); cursor: pointer;
+}
+footer { padding: 40px 0 64px; font-size: 13.5px; color: var(--muted); border-top: 1px solid var(--rule); margin-top: 28px; }
+
+@media (max-width: 760px) {
+  header.wrap { padding-top: 44px; padding-bottom: 32px; }
+  .two { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr 1fr; }
+  .grid4 .tag { font-size: 11px; padding: 3px 6px; }
+  .abstract { text-align: left; }
+}
+
+/* full-video overlay */
+#video-dlg { padding: 0; border: 0; background: transparent; width: min(1200px, 94vw, 150vh); max-width: none; overflow: visible; }
+#video-dlg::backdrop { background: rgba(0, 0, 0, .82); }
+#video-dlg video { display: block; width: 100%; border-radius: 10px; background: #000; max-height: 86vh; }
+.dlg-close {
+  position: absolute; top: -44px; right: 0; width: 36px; height: 36px; border-radius: 50%; border: 0;
+  background: rgba(255, 255, 255, .14); color: #fff; font-size: 24px; line-height: 36px; cursor: pointer;
+}
+.dlg-close:hover { background: rgba(255, 255, 255, .26); }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <p class="venue">IEEE-RAS Humanoids 2026</p>
+  <h1><b>LEAP</b>: Learning Emergent Active Perception <br>for Quadruped Navigation</h1>
+  <div class="rule"></div>
+  <p class="authors">Bora Gökbakan<sup>1</sup>, &nbsp;Stéphane Caron<sup>2</sup>, &nbsp;Philippe Souères<sup>3</sup></p>
+  <p class="affils">
+    <span><sup>1</sup>Inria and DI ENS, PSL, Paris, France</span>
+    <span><sup>2</sup>Institute for Intelligent Systems and Robotics, CNRS and Sorbonne University, Paris, France</span>
+    <span><sup>3</sup>LAAS-CNRS and University of Toulouse, Toulouse, France</span>
+  </p>
+  <div class="links">
+    <a class="btn" href="https://arxiv.org/abs/2609.17628">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>
+      arXiv
+    </a>
+    <a class="btn" href="https://hal.science/hal-05734126">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18v13H3z"/><path d="M3 7l2-4h14l2 4"/><path d="M10 12h4"/></svg>
+      HAL
+    </a>
+    <a class="btn" id="open-video" href="assets/video/leap_video.mp4">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      Full Video
+    </a>
+    <a class="btn" href="#bibtex">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/></svg>
+      BibTeX
+    </a>
+    <span class="btn off" title="coming soon">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57v-2.04c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.33-1.76-1.33-1.76-1.09-.74.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.57A12 12 0 0 0 12 .3"/></svg>
+      Code (coming soon)
+    </span>
+  </div>
+</header>
+
+<div class="wrap">
+  <figure>
+    <div class="media">
+      <video src="assets/video/hero.mp4" poster="assets/video/hero_poster.jpg" autoplay muted loop playsinline></video>
+    </div>
+    <figcaption>
+      Full-body sim2sim transfer on the <code>bridges</code> terrain (MuJoCo). Inlays: camera view (left) and depth
+      image (right).
+    </figcaption>
+  </figure>
+</div>
+
+<section class="wrap">
+  <p class="lede">
+    LEAP trains a navigation policy that steers a quadruped and its camera over hazardous terrain. The reward
+    depends only on the navigation task, with no term for sensing, so the robot learns where to look only because
+    looking helps it reach the goal.
+  </p>
+</section>
+
+<section class="wrap">
+  <h2>Abstract</h2>
+  <p class="abstract">
+    Active perception allows autonomous agents to select their viewpoints rather than passively process the viewpoints
+    given to them, enabling them to target where to reduce uncertainty about their environment. Learned systems
+    typically encourage this behavior with hand-designed proxy objectives, such as coverage or curiosity bonuses, that
+    may conflict with the task. In this work, we propose a method to learn <em>emergent</em> active perception (LEAP)
+    without augmentation of the task objective. We formulate the problem of goal-oriented navigation over hazardous
+    terrains with goals that must be discovered visually. We then propose an architecture for navigation policies with
+    active perception, and train them on a terrain curriculum where task pressure alone leads to the emergence of gaze
+    control. Key to this emergence, LEAP works on a gaze-invariant representation that integrates depth images into
+    egocentric belief maps. We validate its performance in held-out evaluation scenarios, where it achieves a 92.7%
+    success rate, compared to 74.2% for scripted or 34.5% for passive perception, and comes within 4.6 points of a
+    privileged oracle. We validate that LEAP navigation policies, unchanged, can be directly applied to steering
+    quadrupedal locomotion policies in physics simulation.
+  </p>
+</section>
+
+
+<section class="wrap" id="overview">
+  <h2>Overview</h2>
+  <div class="abstract">
+    <p>Navigating to a goal position in an unknown environment:</p>
+    <ul class="contrib">
+      <li><b>goal</b>: must be discovered visually;</li>
+      <li><b>terrain</b>: unmapped; pits and drops end the episode, and the terrain occludes them;</li>
+      <li><b>sensor</b>: a depth camera on a pan-tilt mount;</li>
+      <li><b>control</b>: the policy steers the base and aims the camera.</li>
+    </ul>
+  </div>
+  <figure class="gap">
+    <div class="media"><img src="assets/fig/teaser.jpg" alt="Go2 rollout across a procedurally generated terrain toward a green goal orb, with red camera frusta showing where it looks" loading="lazy"></div>
+    <figcaption>
+      <b>Goal-oriented navigation on hazardous terrain.</b> The Go2 quadruped must reach a goal whose location is not
+      given, on a procedurally generated terrain, where the features that determine the route (a decoy crossing with a
+      pit and a traversable bridge) are only visible from certain viewpoints. LEAP commands both the body and the
+      camera, trained with no sensing reward.
+    </figcaption>
+  </figure>
+
+</section>
+
+<section class="wrap">
+  <h2>Contributions</h2>
+  <ul class="contrib">
+    <li><b>active perception without a sensing reward</b>: a POMDP formulation of goal-oriented navigation where gaze
+    emerges from task pressure alone;</li>
+    <li><b>gaze-invariant observations</b>: depth is back-projected into a belief map by fixed
+    camera geometry, so a new gaze changes which cells are observed but not how they are represented:
+    trying a new viewpoint never produces unfamiliar inputs;</li>
+    <li><b>effective emergent gaze</b>: 92.7% held-out success over five terrain families, within 4.6
+    points of a ground-truth oracle that, given the maps outright, never learns camera control.</li>
+  </ul>
+</section>
+
+<section class="wrap">
+  <h2>Method</h2>
+
+  <div class="two">
+    <figure>
+      <div class="plate"><img src="assets/fig/supercompact.svg" alt="Policy architecture: tokens for robot state, privileged observations, belief maps and ground-truth maps feed a 3-layer transformer encoder with a sparse attention mask" loading="lazy"></div>
+      <figcaption><b>Policy architecture.</b> The sparse attention mask allows a unified actor-critic network where
+      privileged information is withheld from the actor.</figcaption>
+    </figure>
+    <figure>
+      <div class="plate"><img src="assets/fig/moat_fords.svg" alt="Normalized cost-to-go over an islands instance with the descent path from the hardest spawn to the goal" loading="lazy"></div>
+      <figcaption>Normalized cost-to-go over an <code>islands</code> instance: the spawn and goal platforms are each
+      ringed by a fatal moat crossed only by narrow crossings. The trace is the gradient descent on the cost-to-go from
+      the hardest spawn to the goal; its nodes are the reverse-curriculum spawns.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Terrains</h2>
+  <figure>
+    <div class="t3d" id="terrain3d">
+      <div class="t3d-bar">
+        <div class="t3d-tabs"></div>
+        <div class="t3d-views">
+          <button type="button" class="t3d-top">Top view</button>
+          <button type="button" class="t3d-reset">Reset view</button>
+        </div>
+      </div>
+      <div class="t3d-canvas"></div>
+      <div class="t3d-legend">
+        <span><i class="dot" style="background:#22d3ee"></i>spawn</span>
+        <span><i class="dot" style="background:#2ecc40"></i>goal</span>
+        <span><i class="line" style="background:#f5b301"></i>reference path</span>
+        <span><i class="line" style="background:#fff;box-shadow:0 0 0 1px #999"></i>LEAP rollouts</span>
+        <span><svg class="xm" viewBox="-6 -6 12 12" aria-hidden="true"><path d="M-4.6 -2.6 L-2.6 -4.6 L0 -2 L2.6 -4.6 L4.6 -2.6 L2 0 L4.6 2.6 L2.6 4.6 L0 2 L-2.6 4.6 L-4.6 2.6 L-2 0 Z"/></svg>fall</span>
+        <span class="t3d-hint">drag to rotate · scroll to zoom · right-drag to pan</span>
+      </div>
+    </div>
+    <div class="plate" id="terrain-fallback" style="display:none">
+      <img src="assets/fig/terrains.png" alt="Top-down views of five held-out terrain instances with 25 LEAP rollouts each, spawn and goal marked" loading="lazy">
+    </div>
+    <figcaption><b>Training environments.</b> One unseen instance of each procedural terrain type, with 25 LEAP
+    rollouts (5 per tile); <svg class="xm" viewBox="-6 -6 12 12" aria-hidden="true"><path d="M-4.6 -2.6 L-2.6 -4.6 L0 -2 L2.6 -4.6 L4.6 -2.6 L2 0 L4.6 2.6 L2.6 4.6 L0 2 L-2.6 4.6 L-4.6 2.6 L-2 0 Z"/></svg> marks a fall.</figcaption>
+  </figure>
+</section>
+
+<section class="wrap">
+  <h2>Results</h2>
+
+  <h3 class="sub">Goal-reaching on held-out terrain</h3>
+  <div class="tex">
+    <table class="bt">
+      <thead>
+        <tr><th></th><th><code>islands</code></th><th><code>crests</code></th><th><code>pillars</code></th><th><code>bridges</code></th><th><code>decoys</code></th><th><em>mean</em></th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Passive</td><td>5.8 ± 1.4</td><td>2.5 ± 1.9</td><td>97.7 ± 1.2</td><td>36.6 ± 2.8</td><td>29.9 ± 5.0</td><td>34.5 ± 1.6</td></tr>
+        <tr><td>Sweep</td><td>68.4 ± 3.3</td><td>79.1 ± 2.2</td><td>75.0 ± 16.6</td><td>85.6 ± 2.0</td><td>62.6 ± 1.9</td><td>74.2 ± 3.3</td></tr>
+        <tr class="pre"><td>Active (<b>LEAP</b>)</td><td><b>86.5 ± 3.4</b></td><td><b>93.8 ± 1.0</b></td><td><b>98.8 ± 1.2</b></td><td><b>94.9 ± 1.8</b></td><td><b>89.5 ± 1.7</b></td><td><b>92.7 ± 0.5</b></td></tr>
+        <tr class="mid"><td>GT</td><td>94.9 ± 0.8</td><td>98.3 ± 1.1</td><td>99.5 ± 0.3</td><td>98.5 ± 0.9</td><td>95.3 ± 1.1</td><td>97.3 ± 0.3</td></tr>
+      </tbody>
+    </table>
+  </div>
+    <p class="tcap"><b>Goal-reach success (%).</b> Mean ± std over 5 seeds; per seed, 4 randomized episodes on each
+    of 100 unseen layouts per terrain type. Camera-control variants: Passive (fixed level gaze), Sweep (pre-programmed
+    scanning), Active (learned gaze; LEAP), and GT (oracle with ground-truth maps). Bold: best non-oracle success rate
+    per terrain.</p>
+
+  <figure class="gap">
+    <div class="media grid4">
+      <video src="assets/video/decoys_grid.mp4" poster="assets/video/decoys_poster.jpg" autoplay muted loop playsinline></video>
+      <span class="tag t1"><b>Active (LEAP)</b> · <span class="ok">reached</span>, 23.4 s</span>
+      <span class="tag t2"><b>GT</b> · <span class="ok">reached</span>, 8.3 s</span>
+      <span class="tag t3"><b>Sweep</b> · <span class="ok">reached</span>, 35.8 s</span>
+      <span class="tag t4"><b>Passive</b> · <span class="fell">fell</span>, 27.2 s</span>
+    </div>
+    <figcaption>One <code>decoys</code> layout, same spawn and heading for all four variants. Single
+    episodes.</figcaption>
+  </figure>
+  <div class="stats">
+    <div class="stat hi"><div class="n">92.7%</div><div class="l">Active (LEAP)</div></div>
+    <div class="stat gt"><div class="n">97.3%</div><div class="l">GT (oracle)</div></div>
+    <div class="stat"><div class="n">74.2%</div><div class="l">Sweep</div></div>
+    <div class="stat"><div class="n">34.5%</div><div class="l">Passive</div></div>
+  </div>
+  <p class="tcap">Held-out goal-reach success, mean over five terrain types and five seeds.</p>
+
+  <figure class="gap narrow">
+    <div class="plate"><img src="assets/fig/robustness.svg" alt="Success versus spawn distance for each variant" loading="lazy"></div>
+    <figcaption><b>Robustness to spawn distance.</b> Held-out terrain success versus spawn distance <i>d</i>, the
+    fraction of the waypoint chain at which the agent spawns. Active overtakes Sweep beyond <i>d</i> ≈ 0.35 and
+    degrades more slowly. The fall rate at <i>d</i> = 0.1 matches that at <i>d</i> = 1 (6.8% vs 6.9%); the success
+    gap comes from timeouts (7.7% vs 0.3%).</figcaption>
+  </figure>
+
+  <h3 class="sub">Emergent gaze strategies</h3>
+  <figure>
+    <div class="plate"><img src="assets/fig/gaze_orb.svg" alt="Gaze direction distributions on the view sphere for passive, sweep, active and GT, each with one episode's camera trace" loading="lazy"></div>
+    <figcaption><b>Gaze allocation.</b> Camera direction distribution per variant (blue; 10,000 held-out episodes
+    each, normalized to unit mass). The overlaid trace is a single episode on a shared <code>pillars</code> tile with
+    the same initial spawn pose and neutral gaze (0,0), colored by time. Passive never moves; Sweep follows its
+    pre-programmed trajectory; Active (LEAP) concentrates gaze forward and down, along the direction of travel of the
+    agent; GT drifts into the corner and stops: with free information, looking just atrophies.</figcaption>
+  </figure>
+
+  <h3 class="sub">Full-body sim2sim transfer</h3>
+  <figure>
+    <div class="tex">
+      <table class="bt">
+        <thead><tr><th></th><th>Passive</th><th>Sweep</th><th>Active (<b>LEAP</b>)</th><th class="vr">GT</th></tr></thead>
+        <tbody>
+          <tr><td><code>islands</code></td><td>18 ± 6<span class="t">(14.8)</span></td><td>88 ± 5<span class="t">(33.9)</span></td><td><b>97 ± 2</b><span class="t">(16.2)</span></td><td class="vr">91 ± 4<span class="t">(12.6)</span></td></tr>
+          <tr><td><code>crests</code></td><td>16 ± 15<span class="t">(15.3)</span></td><td><b>90 ± 1</b><span class="t">(23.6)</span></td><td><b>90 ± 10</b><span class="t">(16.1)</span></td><td class="vr">98 ± 0<span class="t">(11.7)</span></td></tr>
+          <tr><td><code>pillars</code></td><td>79 ± 9<span class="t">(54.0)</span></td><td>62 ± 12<span class="t">(106.4)</span></td><td><b>88 ± 15</b><span class="t">(33.3)</span></td><td class="vr">86 ± 7<span class="t">(30.2)</span></td></tr>
+          <tr><td><code>bridges</code></td><td>43 ± 5<span class="t">(12.1)</span></td><td>80 ± 6<span class="t">(21.0)</span></td><td><b>97 ± 3</b><span class="t">(13.3)</span></td><td class="vr">99 ± 3<span class="t">(10.7)</span></td></tr>
+          <tr class="pre"><td><code>decoys</code></td><td>36 ± 7<span class="t">(10.6)</span></td><td>76 ± 2<span class="t">(22.0)</span></td><td><b>87 ± 6</b><span class="t">(12.1)</span></td><td class="vr">96 ± 3<span class="t">(13.2)</span></td></tr>
+          <tr class="mid"><td><em>mean</em></td><td>38 ± 5</td><td>79 ± 2</td><td><b>92 ± 6</b></td><td class="vr">94 ± 2</td></tr>
+        </tbody>
+      </table>
+    </div>
+  <p class="tcap"><b>Full-body transfer (MuJoCo).</b> Held-out success (%, mean ± std over 5 seeds); in
+      parentheses, median time to goal (s) over successful episodes, averaged over seeds. Bold: best non-oracle
+      success rate per terrain.</p>
+  </figure>
+</section>
+
+<section class="wrap" id="bibtex">
+  <h2>BibTeX</h2>
+  <div class="bib">
+<pre id="bibtext">@inproceedings{gokbakan2026leap,
+  title     = {{LEAP}: Learning Emergent Active Perception for Quadruped Navigation},
+  author    = {G{\"o}kbakan, Bora and Caron, St{\'e}phane and Sou{\`e}res, Philippe},
+  booktitle = {IEEE-RAS International Conference on Humanoid Robots (Humanoids)},
+  year      = {2026},
+  eprint    = {2609.17628},
+  archivePrefix = {arXiv},
+  url       = {https://arxiv.org/abs/2609.17628}
+}</pre>
+    <button class="copy" id="copy">Copy</button>
+  </div>
+</section>
+
+<footer class="wrap">
+  This work was supported by the PEPR O2R AS2 (No. ANR-22-EXOD-0006) through France 2030, by the Région
+  Île-de-France (DIM AI4IDF), and by PR[AI]RIE-PSAI (ANR-23-IACL-0008).
+</footer>
+
+<dialog id="video-dlg" aria-label="Full video">
+  <button type="button" class="dlg-close" aria-label="Close">&times;</button>
+  <video src="assets/video/leap_video.mp4" poster="assets/video/video_poster.jpg" controls preload="none" playsinline></video>
+</dialog>
+
+<script>
+(function () {
+  var dlg = document.getElementById('video-dlg'), v = dlg.querySelector('video');
+  if (!dlg.showModal) return;   // no <dialog>: the button stays a plain link to the file
+  document.getElementById('open-video').addEventListener('click', function (e) {
+    e.preventDefault();
+    dlg.showModal();
+    v.play();
+  });
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+  dlg.querySelector('.dlg-close').addEventListener('click', function () { dlg.close(); });
+  dlg.addEventListener('close', function () { v.pause(); });
+})();
+document.getElementById('copy').addEventListener('click', function () {
+  var b = this;
+  navigator.clipboard.writeText(document.getElementById('bibtext').textContent).then(function () {
+    b.textContent = 'Copied';
+    setTimeout(function () { b.textContent = 'Copy'; }, 1400);
+  });
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="assets/terrain/terrains.js"></script>
+<script src="assets/terrain/viewer.js"></script>
+</body>
+</html>
