@@ -372,7 +372,7 @@ footer { padding: 40px 0 64px; font-size: 13.5px; color: var(--muted); border-to
 
   <figure class="gap">
     <div class="media grid4">
-      <video src="assets/video/decoys_grid.mp4" poster="assets/video/decoys_poster.jpg" autoplay muted loop playsinline></video>
+      <video id="grid-video" src="assets/video/decoys_grid.mp4" poster="assets/video/decoys_poster.jpg" muted loop playsinline preload="none"></video>
       <span class="tag t1"><b>Active (LEAP)</b> · <span class="ok">reached</span>, 23.4 s</span>
       <span class="tag t2"><b>GT</b> · <span class="ok">reached</span>, 8.3 s</span>
       <span class="tag t3"><b>Sweep</b> · <span class="ok">reached</span>, 35.8 s</span>
@@ -466,6 +466,14 @@ footer { padding: 40px 0 64px; font-size: 13.5px; color: var(--muted); border-to
   dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
   dlg.querySelector('.dlg-close').addEventListener('click', function () { dlg.close(); });
   dlg.addEventListener('close', function () { v.pause(); });
+})();
+// four-variant comparison: play only while at least half of it is on screen, from the start the first time
+(function () {
+  var v = document.getElementById('grid-video');
+  if (!('IntersectionObserver' in window)) { v.autoplay = true; v.play(); return; }
+  new IntersectionObserver(function (es) {
+    if (es[0].isIntersecting) v.play(); else v.pause();
+  }, { threshold: 0.5 }).observe(v);
 })();
 document.getElementById('copy').addEventListener('click', function () {
   var b = this;
